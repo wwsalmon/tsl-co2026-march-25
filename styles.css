@@ -1,0 +1,27 @@
+body {
+    font-family: "PT Serif", serif;
+}
+
+.font-lora, .article-header h1, .idyll h2 {
+    font-family: "Lora", serif;
+}
+
+.article-header {
+    margin-bottom: 0;
+    padding: 64px 0;
+}
+
+.article-header h1 {
+    max-width: 800px;
+    margin: 0 auto 32px auto;
+    font-size: 48px;
+}
+
+.idyll-scroll .idyll-text-container {
+    margin-right: auto;
+    margin-left: 24px;
+}
+
+.idyll-scroll-text .idyll-step {
+    padding: 24px;
+}

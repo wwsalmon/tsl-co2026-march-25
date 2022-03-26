@@ -1,0 +1,20 @@
+{
+  "name": "tsl-co2026-march-25",
+  "version": "1.0.0",
+  "license": "MIT",
+  "idyll": {
+    "theme": "default",
+    "layout": "centered",
+    "googleFonts": ["Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700", "PT+Serif:ital,wght@0,400;0,700;1,400;1,700"],
+    "css": "styles.css",
+    "authorView": false
+  },
+  "dependencies": {
+    "idyll": "^5.0.0",
+    "idyll-d3-component": "^2.0.0",
+    "d3": "^4.0.0"
+  },
+  "devDependencies": {
+    "gh-pages": "^0.12.0"
+  }
+}

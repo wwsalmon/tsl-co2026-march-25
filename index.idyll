@@ -1,0 +1,49 @@
+[meta title:"Tsl Co2026 March 25" description:"Short description of your project" /]
+
+[Header
+  fullWidth:true
+  title:"Pomona, Harvey Mudd admit 2026 classes with record diversity levels"
+  author:"Samson Zhang"
+  authorLink:"https://tsl.news/author/samson-zhang/"
+  date:"March 25, 2022"
+  background:"#ffffff"
+  color:"black"
+   /]
+
+Pomona College and Harvey Mudd College admitted classes with 61.4% and 70% domestic students of color respectively last week, setting diversity records at both schools. The results follow a [significant decrease in the number of black and first-generation students](https://tsl.news/pomona-class-of-2025-diversity/) in Pomona’s class of 2025 from previous years due to the pandemic.
+
+All 5Cs released regular decision admission offers to their classes of 2026 last week. Pomona College announced the demographics of its newly admitted class in a news release last Thursday. Harvey Mudd College President Maria Klawe shared similar statistics with the school’s students and faculty this Thursday.
+
+Scripps College, Pitzer College and Claremont McKenna College have not yet publicly shared the demographics of their newly admitted classes of 2026.
+
+Scroll through TSL’s breakdown of this year’s and historical data below.
+
+[var name:"state" value:0 /]
+
+[Scroller currentStep:state]
+
+  [Graphic className:"d3-component-container"]
+    [CustomD3Component className:"d3-component" state:`state+1` /]
+  [/Graphic]
+
+  [Step]
+  Here's a pretty short step
+  [/Step]
+
+  [Step]
+  Here's another short step
+  [/Step]
+
+  [Step]
+  And a third!
+  [/Step]
+
+[/Scroller]
+
+[br/]
+# Technical Details
+
+## Installation
+
+- Make sure you have `idyll` installed (`npm i -g idyll`).
+- Clone this repo and run `npm install`.
