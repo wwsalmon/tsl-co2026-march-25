@@ -44,6 +44,9 @@ const pomonaColors = ["#20438f","#734c8f","#a15d8a","#be7688","#cf948e","#dab3a0
 
 const hmcColors = ["#2c4391","#af6587","#d7aa98","#f0efe2"];
 
+const delay = 200;
+const duration = 500;
+
 function fadeIn(node, delay = 200, duration = 500) {
   node
       .style("opacity", 0)
@@ -53,19 +56,16 @@ function fadeIn(node, delay = 200, duration = 500) {
       .style("opacity", 1.0)
 }
 
-function widthIn(node, delay = 200, duration = 500) {
+function widthIn(node, width = 64, delay = 200, duration = 500) {
   node
       .attr("width", 0)
       .transition()
       .delay(delay)
       .duration(duration)
-      .attr("width", 64)
+      .attr("width", width);
 }
 
 function addStage1 (svg, isVertical) {
-  const delay = 200;
-  const duration = 500;
-
   // POMONA 2026 DEMOGRAPHICS
   const pom2026 = [Object.fromEntries(pomAdm[0].map((d, i) => [i, d]))];
   const pom2026PercPoc = [...pomAdm[0]].splice(3).reduce((a, b) => a + b, 0);
@@ -73,8 +73,12 @@ function addStage1 (svg, isVertical) {
 
   svg.select("#subtitle-slot-1").text("Class of 2026");
 
-  const pomDemGraph = svg.append("g")
-      .attr("class", "stage1PopOut")
+  const stage1 = svg.append("g")
+      .attr("id", "stage1")
+      .attr("class", "popOut");
+
+  const pomDemGraph = stage1.append("g")
+      .attr("class", "popOut")
       .style("transform", `translate(${padding}px, ${padding + 140}px)`);
 
   const pomDemRect = pomDemGraph.selectAll(".stage1PomDemRect")
@@ -85,7 +89,6 @@ function addStage1 (svg, isVertical) {
       .attr("x", 0)
       .attr("y", d => percentageYScale(d[0]))
       .attr("height", d => percentageYScale(d[1] - d[0]))
-      .attr("width", 0)
       .attr("fill", (d, i) => pomonaColors[i]);
 
   widthIn(pomDemRect);
@@ -94,7 +97,7 @@ function addStage1 (svg, isVertical) {
       .data(pom2026stack)
       .enter()
       .append("line")
-      .attr("class", "stage1PomDemLine stage1FadeOut")
+      .attr("class", "stage1PomDemLine fadeOut")
       .attr("x1", 0)
       .attr("x2", graphWidth)
       .attr("y1", d => percentageYScale(d[1]))
@@ -111,7 +114,7 @@ function addStage1 (svg, isVertical) {
       .data(pom2026stack)
       .enter()
       .append("text")
-      .attr("class", "stage1PomDemLabel stage1FadeOut")
+      .attr("class", "stage1PomDemLabel fadeOut")
       .text((d, i) => (d[1] - d[0]) > 5 ? `${pomLabels[i]}: ${pomAdm[0][i]}%` : "")
       .style("font-size", 12)
       .attr("text-anchor", "end")
@@ -127,7 +130,7 @@ function addStage1 (svg, isVertical) {
   const pocLineY = percentageYScale(100 - pom2026PercPoc);
 
   const stage1PocLine = pomDemGraph.append("line")
-      .attr("class", "stage1FadeOut")
+      .attr("class", "fadeOut")
       .attr("x1", 0)
       .attr("x2", graphWidth)
       .attr("y1", pocLineY)
@@ -138,7 +141,7 @@ function addStage1 (svg, isVertical) {
   fadeIn(stage1PocLine);
 
   const stage1PocLabel = pomDemGraph.append("text")
-      .attr("class", "stage1FadeOut")
+      .attr("class", "fadeOut")
       .text(`D. s. of color: ${pom2026PercPoc}%`)
       .style("font-size", 12)
       .attr("text-anchor", "end")
@@ -148,26 +151,26 @@ function addStage1 (svg, isVertical) {
 
   fadeIn(stage1PocLabel);
 
-  const pomFirstGenGroup = svg.append("g")
-      .attr("class", "stage1PopOut")
+  const pomFirstGenGroup = stage1.append("g")
+      .attr("class", "popOut")
       .style("transform", `translate(${2 * padding + graphWidth}px, ${padding + 140}px)`);
 
   const pomFirstGenRect1 = pomFirstGenGroup.append("rect")
       .attr("height", graphHeight)
       .attr("fill", "#2c4391")
-      .attr("class", "stage1WidthOut");
+      .attr("class", "widthOut");
 
   widthIn(pomFirstGenRect1);
 
   const pomFirstGenRect2 = pomFirstGenGroup.append("rect")
       .attr("height", percentageYScale(100 - pomFirstGen[0]))
       .attr("fill", "#eee")
-      .attr("class", "stage1WidthOut");
+      .attr("class", "widthOut");
 
   widthIn(pomFirstGenRect2);
 
   const pomFirstGenLine = pomFirstGenGroup.append("line")
-      .attr("class", "stage1FadeOut")
+      .attr("class", "fadeOut")
       .attr("x1", 0)
       .attr("x2", graphWidth)
       .attr("y1", percentageYScale(100 - pomFirstGen[0]))
@@ -180,7 +183,7 @@ function addStage1 (svg, isVertical) {
 
   const pomFirstGenLabel = pomFirstGenGroup.append("text")
       .text(`First-gen students: ${pomFirstGen[0]}%`)
-      .attr("class", "stage1FadeOut")
+      .attr("class", "fadeOut")
       .attr("x", graphWidth)
       .attr("y", percentageYScale(100 - pomFirstGen[0]) + 4)
       .style("font-size", 12)
@@ -191,30 +194,28 @@ function addStage1 (svg, isVertical) {
   fadeIn(pomFirstGenLabel);
 }
 
-function removeStage1(svg, isVertical) {
+function removeStage(stage, svg, isVertical) {
   const duration = 500;
 
-  svg.selectAll(".stage1FadeOut")
+  svg.selectAll(`#stage${stage} .fadeOut`)
       .transition()
       .duration(duration)
       .style("opacity", 0)
       .remove();
 
-  svg.selectAll(".stage1WidthOut")
+  svg.selectAll(`#stage${stage} .widthOut`)
       .transition()
       .duration(duration)
       .attr("width", 0)
       .remove();
 
-  svg.selectAll(".stage1PopOut")
+  svg.selectAll(`#stage${stage} .popOut`)
       .transition()
       .delay(duration)
       .remove();
 }
 
 function addStage2 (svg, isVertical) {
-  const delay = 200;
-  const duration = 500;
   const pomData = pomAdm.map(d => Object.fromEntries(d.map((d, i) => [i, d])));
   const pomPercPoc = pomAdm.map(d => [...d].splice(3).reduce((a, b) => a + b, 0));
   const pomStack = d3.stack(pomData).keys(Object.keys(pomData[0]))(pomData);
@@ -222,63 +223,82 @@ function addStage2 (svg, isVertical) {
   svg.select("#subtitle-slot-1").text("Admitted class composition over time");
 
   const area = d3.area()
-      .x((d, i) => padding + i * (graphWidth / (pomAdm.length - 1)))
-      .y0(d => padding + percentageYScale(d[0]) + 140)
-      .y1(d => padding + percentageYScale(d[1]) + 140);
+      .x((d, i) => i * (graphWidth / (pomAdm.length - 1)))
+      .y0(d => percentageYScale(d[0]))
+      .y1(d => percentageYScale(d[1]));
 
   const line = d3.line()(pomPercPoc.map((d, i) => [
-      padding + i * (graphWidth / (pomAdm.length - 1)),
-      padding + percentageYScale(100 - d) + 140,
+      i * (graphWidth / (pomAdm.length - 1)),
+      percentageYScale(100 - d),
   ]));
 
-  svg.selectAll(".stage2PomArea")
+  const stage2 = svg.append("g")
+      .attr("id", "stage2")
+      .attr("class", "popOut");
+
+  const defs = stage2.append("defs").attr("class", "popOut");
+
+  const clipLeft1 = defs.append("clipPath")
+      .attr("id", "clipLeft1")
+      .append("rect")
+      .attr("class", "widthOut")
+      .attr("width", 0)
+      .attr("height", graphHeight);
+
+  const clipLeft2 = defs.append("clipPath")
+      .attr("id", "clipLeft2")
+      .append("rect")
+      .attr("class", "widthOut")
+      .attr("width", 0)
+      .attr("height", graphHeight);
+
+  const clipMidLeft = defs.append("clipPath")
+      .attr("id", "clipMidLeft")
+      .append("rect")
+      .attr("class", "widthOut")
+      .attr("x", padding + graphWidth)
+      .attr("width", 0)
+      .attr("height", graphHeight);
+
+  const pomDemoGraph = stage2.append("g")
+      .attr("class", "popOut")
+      .style("transform", `translate(${padding}px, ${padding + 140}px)`);
+
+  pomDemoGraph.selectAll(".stage2PomArea")
       .data(pomStack)
       .enter()
       .append("path")
       .attr("fill", (d, i) => pomonaColors[i])
-      .attr("class", "stage2PomArea")
+      .attr("class", "popOut")
       .attr("d", area)
-      .attr("clip-path", "url(#stage2Left)");
+      .attr("clip-path", "url(#clipLeft1)");
 
-  svg.append("path")
+  pomDemoGraph.append("path")
       .attr("d", line)
-      .attr("class", "stage2PomPocLine")
+      .attr("class", "popOut")
       .attr("stroke-width", 2)
       .attr("fill", "none")
       .attr("stroke", "white")
-      .attr("clip-path", "url(#stage2Left2)");
+      .attr("clip-path", "url(#clipLeft2)");
 
-  svg.append("line")
-      .attr("x1", padding)
-      .attr("x2", padding + graphWidth)
-      .attr("y1", padding + 140 + graphWidth / 2)
-      .attr("y2", padding + 140 + graphWidth / 2)
+  pomDemoGraph.append("line")
+      .attr("class", "popOut")
+      .attr("x1", 0)
+      .attr("x2", graphWidth)
+      .attr("y1", graphWidth / 2)
+      .attr("y2", graphWidth / 2)
       .attr("stroke-width", 2)
       .attr("stroke-dasharray", 4)
       .attr("fill", "none")
       .attr("stroke", "white")
       .style("opacity", 0.5)
-      .attr("clip-path", "url(#stage2Left2)");
+      .attr("clip-path", "url(#clipLeft2)");
 
-  svg.select("#stage2Left rect")
-      .attr("width", 0)
-      .transition()
-      .delay(delay)
-      .duration(duration)
-      .attr("width", graphWidth);
-
-  svg.select("#stage2Left2 rect")
-      .attr("width", 0)
-      .transition()
-      .delay(delay + 300)
-      .duration(duration)
-      .attr("width", graphWidth);
-
-  svg.append("text")
+  pomDemoGraph.append("text")
       .text("50% d. s. of color")
-      .attr("class", "stage2Label")
-      .attr("x", padding + 8)
-      .attr("y", padding + 140 + graphHeight / 2 + 4)
+      .attr("class", "stage2Label fadeOut")
+      .attr("x", 8)
+      .attr("y", graphHeight / 2 + 4)
       .style("font-size", 12)
       .attr("dominant-baseline", "text-before-edge")
       .attr("fill", "white")
@@ -287,27 +307,10 @@ function addStage2 (svg, isVertical) {
       .delay(delay + 300)
       .duration(duration)
       .style("opacity", 0.5);
-}
 
-function removeStage2(svg, isVertical) {
-  const duration = 500;
+  widthIn(clipLeft1, graphWidth);
 
-  svg.select("#stage2Left2 rect")
-      .attr("width", graphWidth)
-      .transition()
-      .duration(duration)
-      .attr("width", 0);
-
-  svg.select("#stage2Left rect")
-      .attr("width", graphWidth)
-      .transition()
-      .duration(duration)
-      .attr("width", 0);
-
-  svg.selectAll(".stage2PomArea, .stage2PomPocLine, .stage2PomPocLine, .stage2Label")
-      .transition()
-      .delay(duration)
-      .remove();
+  widthIn(clipLeft2, graphWidth, delay + 300);
 }
 
 class CustomD3Component extends D3Component {
@@ -321,32 +324,6 @@ class CustomD3Component extends D3Component {
       .attr('viewBox', `0 0 ${width} ${height}`)
       .style('width', '100%')
       .style('height', '100vh');
-
-    const defs = svg.append("defs");
-
-    defs.append("clipPath")
-        .attr("id", "stage2Left")
-        .append("rect")
-        .attr("x", padding)
-        .attr("y", padding + 140)
-        .attr("width", 0)
-        .attr("height", graphHeight);
-
-    defs.append("clipPath")
-        .attr("id", "stage2Left2")
-        .append("rect")
-        .attr("x", padding)
-        .attr("y", padding + 140)
-        .attr("width", 0)
-        .attr("height", graphHeight);
-
-    defs.append("clipPath")
-        .attr("id", "stage2MidLeft")
-        .append("rect")
-        .attr("x", 2 * padding + graphWidth)
-        .attr("y", padding + 140)
-        .attr("width", 0)
-        .attr("height", graphHeight);
 
     svg.append("text")
         .attr("id", "pomona-title")
@@ -375,13 +352,13 @@ class CustomD3Component extends D3Component {
     if (state === 1) {
       addStage1(this.svg, false);
     } else {
-      removeStage1(this.svg, false);
+      removeStage(1, this.svg, false);
     }
 
     if (state === 2) {
       addStage2(this.svg, false);
     } else {
-      removeStage2(this.svg, false);
+      removeStage(2, this.svg, false);
     }
   }
 }
