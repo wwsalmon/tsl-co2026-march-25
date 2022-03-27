@@ -17,6 +17,22 @@ import {
 
 const d3 = require("d3");
 
+function addTimeAxis(group, numYears) {
+    const timeAxis = d3
+        .axisBottom(d3.scaleLinear().domain([2026, 2026 - numYears]).range([graphWidth, 0]))
+        .tickFormat(d => d)
+        .ticks(numYears / Math.floor(numYears / 4))
+        .tickSize(0);
+
+    const firstGenAxis = group.append("g")
+        .call(timeAxis)
+        .attr("class", "fadeOut")
+        .style("transform", `translate(0,${graphHeight + 6}px)`)
+        .style("font-size", 9);
+
+    fadeIn(firstGenAxis, 0.5);
+}
+
 function addDemoGraph(stage2, defs, data, labels, colors = pomonaColors, numBeforePoc = 3, xOffset = padding) {
     const area = d3.area()
         .x((d, i, a) => i * (graphWidth / (a.length - 1)))
@@ -24,8 +40,8 @@ function addDemoGraph(stage2, defs, data, labels, colors = pomonaColors, numBefo
         .y1(d => percentageYScale(d[1]));
 
     const dataConverted = data.map(d => Object.fromEntries(d.map((d, i) => [i, d])));
-    const percPoc = data.map(d => [...d].splice(numBeforePoc).reduce((a, b) => a + b, 0));
-    const dataStacked = d3.stack().keys(Object.keys(dataConverted[0]))(dataConverted);
+    const percPoc = data.map(d => [...d].splice(numBeforePoc).reduce((a, b) => a + b, 0)).reverse();
+    const dataStacked = d3.stack().keys(Object.keys(dataConverted[0]))(dataConverted.reverse());
 
     const line = d3.line()(percPoc.map((d, i) => [
         i * (graphWidth / (percPoc.length - 1)),
@@ -70,8 +86,8 @@ function addDemoGraph(stage2, defs, data, labels, colors = pomonaColors, numBefo
         .attr("class", "fadeOut")
         .attr("x1", 0)
         .attr("x2", graphWidth)
-        .attr("y1", percentageYScale(100 - percPoc[0]))
-        .attr("y2", percentageYScale(100 - percPoc[0]))
+        .attr("y1", percentageYScale(100 - percPoc[percPoc.length - 1]))
+        .attr("y2", percentageYScale(100 - percPoc[percPoc.length - 1]))
         .attr("stroke-width", 2)
         .attr("stroke-dasharray", 4)
         .attr("fill", "none")
@@ -80,10 +96,10 @@ function addDemoGraph(stage2, defs, data, labels, colors = pomonaColors, numBefo
     fadeIn(poc2026Line, 0.75);
 
     const poc2026Label = demoGraph.append("text")
-        .text(`${percPoc[0]}%`)
+        .text(`${percPoc[percPoc.length - 1]}%`)
         .attr("class", "fadeOut")
         .attr("x", graphWidth - 8)
-        .attr("y", percentageYScale(100 - percPoc[0]) + 4)
+        .attr("y", percentageYScale(100 - percPoc[percPoc.length - 1]) + 4)
         .style("font-size", 12)
         .attr("text-anchor", "end")
         .attr("dominant-baseline", "text-before-edge")
@@ -101,6 +117,8 @@ function addDemoGraph(stage2, defs, data, labels, colors = pomonaColors, numBefo
         .attr("fill", "white");
 
     fadeIn(poc50Label, 0.5);
+
+    addTimeAxis(demoGraph, data.length);
 }
 
 function addFirstGenGraph(stage2, defs, data, xOffset = 2 * padding + graphWidth) {
@@ -112,30 +130,18 @@ function addFirstGenGraph(stage2, defs, data, xOffset = 2 * padding + graphWidth
             return graphHeight - percentageYScale(d)
         });
 
-    const line = d3.line()(data.map((d, i, a) => [
-        i * (graphWidth / (a.length - 1)),
-        graphHeight - percentageYScale(d),
-    ]));
-
-    const clipMidLeft = defs.append("clipPath")
-        .attr("id", "clipMidLeft")
-        .append("rect")
-        .attr("class", "widthOut")
-        .attr("width", 0)
-        .attr("height", graphHeight);
-
     const firstGenGraph = stage2.append("g")
         .attr("class", "popOut")
         .style("transform", `translate(${xOffset}px, ${padding + 140}px)`);
 
     firstGenGraph.append("rect")
-        .attr("clip-path", "url(#clipMidLeft)")
+        .attr("clip-path", "url(#clipLeft1)")
         .attr("width", graphWidth)
         .attr("height", graphHeight)
         .attr("fill", "#eee");
 
     firstGenGraph.append("path")
-        .attr("clip-path", "url(#clipMidLeft)")
+        .attr("clip-path", "url(#clipLeft2)")
         .attr("fill", pomonaColors[0])
         .attr("class", "popOut")
         .datum(data)
@@ -146,8 +152,8 @@ function addFirstGenGraph(stage2, defs, data, xOffset = 2 * padding + graphWidth
         .attr("class", "fadeOut")
         .attr("x1", 0)
         .attr("x2", graphWidth)
-        .attr("y1", percentageYScale(100 - data[0]))
-        .attr("y2", percentageYScale(100 - data[0]))
+        .attr("y1", percentageYScale(100 - data[data.length - 1]))
+        .attr("y2", percentageYScale(100 - data[data.length - 1]))
         .attr("stroke-width", 2)
         .attr("stroke-dasharray", 4)
         .attr("fill", "none")
@@ -156,10 +162,10 @@ function addFirstGenGraph(stage2, defs, data, xOffset = 2 * padding + graphWidth
     fadeIn(firstGen2026Line, 0.75);
 
     const firstGen2026Label = firstGenGraph.append("text")
-        .text(`${data[0]}%`)
+        .text(`${data[data.length - 1]}%`)
         .attr("class", "fadeOut")
         .attr("x", graphWidth - 8)
-        .attr("y", percentageYScale(100 - data[0]) - 4)
+        .attr("y", percentageYScale(100 - data[data.length - 1]) - 4)
         .style("font-size", 12)
         .attr("text-anchor", "end")
         .attr("dominant-baseline", "text-after-edge")
@@ -167,7 +173,7 @@ function addFirstGenGraph(stage2, defs, data, xOffset = 2 * padding + graphWidth
 
     fadeIn(firstGen2026Label, 0.75);
 
-    widthIn(clipMidLeft, graphWidth);
+    addTimeAxis(firstGenGraph, data.length);
 }
 
 export function addStage2 (svg, isVertical) {
@@ -199,6 +205,8 @@ export function addStage2 (svg, isVertical) {
 
     addDemoGraph(stage2, defs, pomAdmStage2, hmcLabels, hmcColors, 1);
     addDemoGraph(stage2, defs, hmcDemographics, hmcLabels, hmcColors, 1, 3 * padding + 2 * graphWidth);
-    addFirstGenGraph(stage2, defs, pomFirstGen);
-    addFirstGenGraph(stage2, defs, hmcFirstGen, 4 * padding + 3 * graphWidth);
+    addFirstGenGraph(stage2, defs, [...pomFirstGen].reverse());
+    addFirstGenGraph(stage2, defs, [...hmcFirstGen].reverse(), 4 * padding + 3 * graphWidth);
+
+    stage2.selectAll(".domain").style("display", "none");
 }
