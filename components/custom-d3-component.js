@@ -21,8 +21,8 @@ class CustomD3Component extends D3Component {
       .style('height', '100vh');
 
     svg.append("text")
-        .attr("id", "pomona-title")
-        .text("Pomona")
+        .attr("id", "title")
+        .text("Class of 2026")
         .attr("class", "font-lora")
         .attr("dominant-baseline", "text-before-edge")
         .attr("font-size", 36)
@@ -30,17 +30,8 @@ class CustomD3Component extends D3Component {
         .attr("y", padding);
 
     svg.append("text")
-        .attr("id", "hmc-title")
-        .text("Harvey Mudd")
-        .attr("class", "font-lora")
-        .attr("dominant-baseline", "text-before-edge")
-        .attr("font-size", 36)
-        .attr("x", width / 2)
-        .attr("y", padding);
-
-    svg.append("text")
         .attr("id", "subtitle-slot-1")
-        .text("Class of 2026")
+        .text("Pomona")
         .style("font-weight", 700)
         .attr("dominant-baseline", "text-before-edge")
         .attr("font-size", 20)
@@ -49,7 +40,7 @@ class CustomD3Component extends D3Component {
 
     svg.append("text")
         .attr("id", "subtitle-slot-2")
-        .text("Class of 2026")
+        .text("Harvey Mudd")
         .style("font-weight", 700)
         .attr("dominant-baseline", "text-before-edge")
         .attr("font-size", 20)
