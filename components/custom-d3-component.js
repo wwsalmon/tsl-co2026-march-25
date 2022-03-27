@@ -1,12 +1,12 @@
 const React = require('react');
 const D3Component = require('idyll-d3-component');
 const d3 = require("d3");
-const {addStage1} = require("../stages/addStage1");
-const {addStage2} = require("../stages/addStage2");
-const {removeStage} = require("../stages/removeStage");
-const {padding} = require("../stages/helpers");
-const {baseHeight} = require("../stages/helpers");
-const {baseWidth} = require("../stages/helpers");
+const {addStage1} = require("./stages/addStage1");
+const {addStage2} = require("./stages/addStage2");
+const {removeStage} = require("./stages/removeStage");
+const {padding} = require("./stages/helpers");
+const {baseHeight} = require("./stages/helpers");
+const {baseWidth} = require("./stages/helpers");
 
 class CustomD3Component extends D3Component {
   initialize(node, props) {
