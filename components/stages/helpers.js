@@ -73,3 +73,26 @@ export function widthIn(node, width = 64, delay = 200, duration = 500) {
         .duration(duration)
         .attr("width", width);
 }
+
+export function addLegend(node, labels, colors) {
+    const legend = node.selectAll(".stage1DemLegend")
+        .data(labels)
+        .enter()
+        .append("g")
+        .attr("class", "fadeOut")
+        .style("transform", (d, i) => `translate(0, ${graphHeight + padding + i * 24}px)`);
+
+    legend.append("rect")
+        .attr("width", 16)
+        .attr("height", 16)
+        .attr("fill", (d, i) => colors[i]);
+
+    legend.append("text")
+        .text(d => d)
+        .attr("x", 28)
+        .style("font-size", 12)
+        .style("opacity", 0.5)
+        .attr("dominant-baseline", "text-before-edge");
+
+    fadeIn(legend);
+}

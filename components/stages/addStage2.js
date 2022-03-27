@@ -1,4 +1,5 @@
 import {
+    addLegend,
     delay,
     fadeIn,
     graphHeight,
@@ -119,6 +120,8 @@ function addDemoGraph(stage2, defs, data, labels, colors = pomonaColors, numBefo
     fadeIn(poc50Label, 0.5);
 
     addTimeAxis(demoGraph, data.length);
+
+    addLegend(demoGraph, hmcLabels, hmcColors);
 }
 
 function addFirstGenGraph(stage2, defs, data, xOffset = 2 * padding + graphWidth) {

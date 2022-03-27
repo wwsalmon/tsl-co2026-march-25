@@ -10,7 +10,7 @@ import {
     pomonaColors,
     widthIn,
     delay,
-    duration, hmcFirstGen, pomAdm, hmcDemographics, hmcLabels, hmcColors,
+    duration, hmcFirstGen, pomAdm, hmcDemographics, hmcLabels, hmcColors, addLegend,
 } from "./helpers";
 
 function demoGraph(stage1, data, labels, colors = pomonaColors, numBeforePoc = 3, xOffset = padding) {
@@ -74,26 +74,7 @@ function demoGraph(stage1, data, labels, colors = pomonaColors, numBeforePoc = 3
         .duration(duration)
         .style("opacity", 0.25);
 
-    const legend = demGraph.selectAll(".stage1DemLegend")
-        .data(needLegend)
-        .enter()
-        .append("g")
-        .attr("class", "fadeOut")
-        .style("transform", (d, i) => `translate(0, ${graphHeight + padding + i * 24}px)`);
-
-    legend.append("rect")
-        .attr("width", 16)
-        .attr("height", 16)
-        .attr("fill", d => colors[d.index]);
-
-    legend.append("text")
-        .text(d => d.label)
-        .attr("x", 28)
-        .style("font-size", 12)
-        .style("opacity", 0.5)
-        .attr("dominant-baseline", "text-before-edge");
-
-    fadeIn(legend);
+    addLegend(demGraph, needLegend.map(d => d.label), pomonaColors.filter((d, i) => needLegend.some(d => d.index === i)));
 
     const pocLineY = percentageYScale(100 - percPoc);
 
