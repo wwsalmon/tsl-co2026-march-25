@@ -8,14 +8,14 @@ export const graphWidth = (baseWidth - 3 * padding) / 2;
 
 export const percentageYScale = d3.scaleLinear().domain([0, 100]).range([0, graphHeight]);
 
-export const pomLabels = ["White", "International", "Declined to state", "Asian American", "Black", "Latina/o", "Native American", "Multiracial"];
+export const pomLabels = ["White", "International", "Declined to state", "Latina/o", "Asian American", "Black", "Native American", "Multiracial"];
 
 export const pomAdm = [
-    [20.8, 14.4, 3.4, 17.4, 15.5, 17.9, 1.1, 9.5],
-    [26.3, 15.8, 3.1, 16, 11.8, 17.2, 0.9, 8.9],
-    [25.1, 13.6, 2.6, 14.2, 17.9, 19.3, 0.8, 6.6],
-    [25.9, 13.5, 2.8, 17.9, 13.6, 19.8, 1.4, 5.1],
-    [0, 32.2, 11.3, 16.8, 12.8, 17.8, 1.4, 7.7],
+    [20.8, 14.4, 3.4, 17.9, 17.4, 15.5, 1.1, 9.5],
+    [26.3, 15.8, 3.1, 17.2, 16, 11.8, 0.9, 8.9],
+    [25.1, 13.6, 2.6, 19.3, 14.2, 17.9, 0.8, 6.6],
+    [25.9, 13.5, 2.8, 19.8, 17.9, 13.6, 1.4, 5.1],
+    [0, 32.2, 11.3, 17.8, 16.8, 12.8, 1.4, 7.7],
 ];
 
 export const pomFirstGen = [23, 18.5, 20.7, 20.3, 19.2];
@@ -31,16 +31,18 @@ const hmcDemographicsOriginal = [ // 2021 t0 2016
     [35.6,11.1,4.8,19.4,3.0,15.8,0.4,0.4,9.5],
 ];
 
-export const hmcLabels = ["White, int'l or unknown", "Black", "Latina/o", "Other d. s. of color"];
+export const hmcFirstGen = [20.5, 0, 11, 10];
+
+export const hmcLabels = ["White, int'l or unknown", "Latina/o", "Black", "Other d. s. of color"];
 
 export const hmcDemographics = [
-    [30, 10.1, 28.8, 31.1],
-    ...hmcDemographicsOriginal.map(d => [d[0] + d[1] + d[2], d[4], d[5], d[3] + d[6] + d[7] + d[8]]),
+    [30, 28.8, 10.1, 31.1],
+    ...hmcDemographicsOriginal.map(d => [d[0] + d[1] + d[2], d[5], d[4], d[3] + d[6] + d[7] + d[8]]),
 ];
 
 export const pomonaColors = ["#20438f","#734c8f","#a15d8a","#be7688","#cf948e","#dab3a0","#e3d2bd","#f1efe2"];
 
-export const hmcColors = ["#2c4391","#af6587","#d7aa98","#f0efe2"];
+export const hmcColors = ["#2c4391","#c8948d","#d5b39f","#f0efe2"];
 
 export const delay = 200;
 export const duration = 500;

@@ -25,8 +25,17 @@ class CustomD3Component extends D3Component {
         .text("Pomona")
         .attr("class", "font-lora")
         .attr("dominant-baseline", "text-before-edge")
-        .attr("font-size", 48)
+        .attr("font-size", 36)
         .attr("x", padding)
+        .attr("y", padding);
+
+    svg.append("text")
+        .attr("id", "hmc-title")
+        .text("Harvey Mudd")
+        .attr("class", "font-lora")
+        .attr("dominant-baseline", "text-before-edge")
+        .attr("font-size", 36)
+        .attr("x", width / 2)
         .attr("y", padding);
 
     svg.append("text")
@@ -36,6 +45,15 @@ class CustomD3Component extends D3Component {
         .attr("dominant-baseline", "text-before-edge")
         .attr("font-size", 20)
         .attr("x", padding)
+        .attr("y", padding  + 80);
+
+    svg.append("text")
+        .attr("id", "subtitle-slot-2")
+        .text("Class of 2026")
+        .style("font-weight", 700)
+        .attr("dominant-baseline", "text-before-edge")
+        .attr("font-size", 20)
+        .attr("x", width / 2)
         .attr("y", padding  + 80);
 
     addStage1(svg, false);

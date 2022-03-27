@@ -5,44 +5,37 @@ import {
     graphWidth,
     padding,
     percentageYScale,
-    pomAdm, pomFirstGen,
+    data, pomFirstGen,
     pomLabels,
     pomonaColors,
     widthIn,
     delay,
-    duration,
+    duration, hmcFirstGen, pomAdm, hmcDemographics, hmcLabels, hmcColors,
 } from "./helpers";
 
-export function addStage1 (svg, isVertical) {
-    // POMONA 2026 DEMOGRAPHICS
-    const pom2026 = [Object.fromEntries(pomAdm[0].map((d, i) => [i, d]))];
-    const pom2026PercPoc = [...pomAdm[0]].splice(3).reduce((a, b) => a + b, 0);
-    const pom2026stack = d3.stack().keys([...Array(pomAdm[0].length).keys()])(pom2026).map(d => d[0]);
+function demoGraph(stage1, data, labels, colors = pomonaColors, numBeforePoc = 3, xOffset = padding) {
+    const dataConverted = [Object.fromEntries(data[0].map((d, i) => [i, d]))];
+    const percPoc = [...data[0]].splice(numBeforePoc).reduce((a, b) => a + b, 0);
+    const dataStacked = d3.stack().keys([...Array(data[0].length).keys()])(dataConverted).map(d => d[0]);
 
-    svg.select("#subtitle-slot-1").text("Class of 2026");
-
-    const stage1 = svg.append("g")
-        .attr("id", "stage1")
-        .attr("class", "popOut");
-
-    const pomDemGraph = stage1.append("g")
+    const demGraph = stage1.append("g")
         .attr("class", "popOut")
-        .style("transform", `translate(${padding}px, ${padding + 140}px)`);
+        .style("transform", `translate(${xOffset}px, ${padding + 140}px)`);
 
-    const pomDemRect = pomDemGraph.selectAll(".stage1PomDemRect")
-        .data(pom2026stack)
+    const demRect = demGraph.selectAll(".stage1PomDemRect")
+        .data(dataStacked)
         .enter()
         .append("rect")
         .attr("class", "stage1PomDemRect widthOut")
         .attr("x", 0)
         .attr("y", d => percentageYScale(d[0]))
         .attr("height", d => percentageYScale(d[1] - d[0]))
-        .attr("fill", (d, i) => pomonaColors[i]);
+        .attr("fill", (d, i) => colors[i]);
 
-    widthIn(pomDemRect);
+    widthIn(demRect);
 
-    pomDemGraph.selectAll(".stage1PomDemLine")
-        .data(pom2026stack)
+    demGraph.selectAll(".stage1PomDemLine")
+        .data(dataStacked)
         .enter()
         .append("line")
         .attr("class", "stage1PomDemLine fadeOut")
@@ -58,26 +51,26 @@ export function addStage1 (svg, isVertical) {
         .duration(duration)
         .style("opacity", 0.25);
 
-    pomDemGraph.selectAll(".stage1PomDemLabel")
-        .data(pom2026stack)
+    demGraph.selectAll(".stage1PomDemLabel")
+        .data(dataStacked)
         .enter()
         .append("text")
         .attr("class", "stage1PomDemLabel fadeOut")
-        .text((d, i) => (d[1] - d[0]) > 5 ? `${pomLabels[i]}: ${pomAdm[0][i]}%` : "")
+        .text((d, i) => (d[1] - d[0]) > 5 ? `${labels[i]}: ${data[0][i]}%` : "")
         .style("font-size", 12)
         .attr("text-anchor", "end")
         .attr("dominant-baseline", "text-after-edge")
         .attr("x", graphWidth)
-        .attr("y", d => percentageYScale(d[1]))
+        .attr("y", d => percentageYScale(d[1]) - 4)
         .style("opacity", 0)
         .transition()
         .delay(delay)
         .duration(duration)
         .style("opacity", 0.25);
 
-    const pocLineY = percentageYScale(100 - pom2026PercPoc);
+    const pocLineY = percentageYScale(100 - percPoc);
 
-    const stage1PocLine = pomDemGraph.append("line")
+    const stage1PocLine = demGraph.append("line")
         .attr("class", "fadeOut")
         .attr("x1", 0)
         .attr("x2", graphWidth)
@@ -88,9 +81,9 @@ export function addStage1 (svg, isVertical) {
 
     fadeIn(stage1PocLine);
 
-    const stage1PocLabel = pomDemGraph.append("text")
+    const stage1PocLabel = demGraph.append("text")
         .attr("class", "fadeOut")
-        .text(`D. s. of color: ${pom2026PercPoc}%`)
+        .text(`D. s. of color: ${percPoc}%`)
         .style("font-size", 12)
         .attr("text-anchor", "end")
         .attr("dominant-baseline", "text-before-edge")
@@ -98,46 +91,64 @@ export function addStage1 (svg, isVertical) {
         .attr("y", pocLineY + 4);
 
     fadeIn(stage1PocLabel);
+}
 
-    const pomFirstGenGroup = stage1.append("g")
+function firstGenGraph(stage1, percentFirstGen, xOffset = 2 * padding + graphWidth) {
+    const firstGenGroup = stage1.append("g")
         .attr("class", "popOut")
-        .style("transform", `translate(${2 * padding + graphWidth}px, ${padding + 140}px)`);
+        .style("transform", `translate(${xOffset}px, ${padding + 140}px)`);
 
-    const pomFirstGenRect1 = pomFirstGenGroup.append("rect")
+    const firstGenRect1 = firstGenGroup.append("rect")
         .attr("height", graphHeight)
         .attr("fill", "#2c4391")
         .attr("class", "widthOut");
 
-    widthIn(pomFirstGenRect1);
+    widthIn(firstGenRect1);
 
-    const pomFirstGenRect2 = pomFirstGenGroup.append("rect")
-        .attr("height", percentageYScale(100 - pomFirstGen[0]))
+    const firstGenRect2 = firstGenGroup.append("rect")
+        .attr("height", percentageYScale(100 - percentFirstGen))
         .attr("fill", "#eee")
         .attr("class", "widthOut");
 
-    widthIn(pomFirstGenRect2);
+    widthIn(firstGenRect2);
 
-    const pomFirstGenLine = pomFirstGenGroup.append("line")
+    const firstGenLine = firstGenGroup.append("line")
         .attr("class", "fadeOut")
         .attr("x1", 0)
         .attr("x2", graphWidth)
-        .attr("y1", percentageYScale(100 - pomFirstGen[0]))
-        .attr("y2", percentageYScale(100 - pomFirstGen[0]))
+        .attr("y1", percentageYScale(100 - percentFirstGen))
+        .attr("y2", percentageYScale(100 - percentFirstGen))
         .attr("stroke-width", 2)
         .attr("fill", "none")
         .attr("stroke", "black");
 
-    fadeIn(pomFirstGenLine);
+    fadeIn(firstGenLine);
 
-    const pomFirstGenLabel = pomFirstGenGroup.append("text")
-        .text(`First-gen students: ${pomFirstGen[0]}%`)
+    const firstGenLabel = firstGenGroup.append("text")
+        .text(`First-gen students: ${percentFirstGen}%`)
         .attr("class", "fadeOut")
         .attr("x", graphWidth)
-        .attr("y", percentageYScale(100 - pomFirstGen[0]) - 4)
+        .attr("y", percentageYScale(100 - percentFirstGen) - 4)
         .style("font-size", 12)
         .attr("text-anchor", "end")
         .attr("dominant-baseline", "text-after-edge")
         .attr("fill", "black");
 
-    fadeIn(pomFirstGenLabel);
+    fadeIn(firstGenLabel);
+}
+
+export function addStage1 (svg, isVertical) {
+    svg.select("#subtitle-slot-1, #subtitle-slot-2").text("Class of 2026");
+
+    const stage1 = svg.append("g")
+        .attr("id", "stage1")
+        .attr("class", "popOut");
+
+    demoGraph(stage1, pomAdm, pomLabels);
+
+    demoGraph(stage1, hmcDemographics, hmcLabels, hmcColors, 1, 3 * padding + 2 * graphWidth);
+
+    firstGenGraph(stage1, pomFirstGen[0]);
+
+    firstGenGraph(stage1, hmcFirstGen[0], 4 * padding + 3 * graphWidth);
 }
