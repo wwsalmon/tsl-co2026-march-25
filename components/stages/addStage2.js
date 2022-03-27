@@ -1,15 +1,20 @@
 import {
+    delay,
+    fadeIn,
     graphHeight,
     graphWidth,
+    hmcColors,
+    hmcDemographics,
+    hmcFirstGen,
+    hmcLabels,
     padding,
     percentageYScale,
-    pomAdm,
+    pomAdmStage2,
+    pomFirstGen,
     pomonaColors,
     widthIn,
-    delay,
-    duration,
-    pomFirstGen, fadeIn, pomLabels, hmcDemographics, hmcLabels, hmcColors, hmcFirstGen,
 } from "./helpers";
+
 const d3 = require("d3");
 
 function addDemoGraph(stage2, defs, data, labels, colors = pomonaColors, numBeforePoc = 3, xOffset = padding) {
@@ -192,7 +197,7 @@ export function addStage2 (svg, isVertical) {
 
     widthIn(clipLeft2, graphWidth, delay + 300);
 
-    addDemoGraph(stage2, defs, pomAdm, pomLabels);
+    addDemoGraph(stage2, defs, pomAdmStage2, hmcLabels, hmcColors, 1);
     addDemoGraph(stage2, defs, hmcDemographics, hmcLabels, hmcColors, 1, 3 * padding + 2 * graphWidth);
     addFirstGenGraph(stage2, defs, pomFirstGen);
     addFirstGenGraph(stage2, defs, hmcFirstGen, 4 * padding + 3 * graphWidth);

@@ -18,6 +18,8 @@ export const pomAdm = [
     [0, 32.2, 11.3, 17.8, 16.8, 12.8, 1.4, 7.7],
 ];
 
+export const pomAdmStage2 = pomAdm.map(d => [d[0] + d[1] + d[2], d[4], d[5], d[3] + d[6] + d[7]]);
+
 export const pomFirstGen = [23, 18.5, 20.7, 20.3, 19.2];
 
 export const hmcLabelsOriginal = ["White", "International", "Unknown", "Asian American", "Black", "Latina/o", "American Indian or Alaska Native", "Native Hawaiian or Other Pacific Islander", "Two or More Races"];
