@@ -146,7 +146,8 @@ function firstGenGraph(stage1, percentFirstGen, xOffset = 2 * padding + graphWid
 }
 
 export function addStage1 (svg, isVertical) {
-    svg.select("#title").text("Class of 2026");
+    svg.select("#title").text("Admitted class of 2026");
+    svg.select("#subtitle-slot-2").text("Harvey Mudd")
 
     const stage1 = svg.append("g")
         .attr("id", "stage1")

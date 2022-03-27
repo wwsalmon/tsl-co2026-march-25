@@ -40,7 +40,7 @@ const hmcDemographicsOriginal = [ // 2021 t0 2016
     [58.3,4.7,4.8,19.4,0.9,6.9,0.4,0.0,4.7],
 ];
 
-export const hmcFirstGen = [20.5, 0, 11, 10];
+export const hmcFirstGen = [20.5, 15.75, 11, 10]; // 15.75 is an artifically calculated average because no real data is available
 
 export const hmcLabels = ["White, int'l or unknown", "Latina/o", "Black", "Other d. s. of color"];
 

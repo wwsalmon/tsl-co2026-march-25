@@ -180,7 +180,8 @@ function addFirstGenGraph(stage2, defs, data, xOffset = 2 * padding + graphWidth
 }
 
 export function addStage2 (svg, isVertical) {
-    svg.select("#title").text("Admitted* class composition over time");
+    svg.select("#title").text("Admitted class composition over time");
+    svg.select("#subtitle-slot-2").text("Harvey Mudd*")
 
     const stage2 = svg.append("g")
         .attr("id", "stage2")
