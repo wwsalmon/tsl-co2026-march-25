@@ -8,7 +8,7 @@ import {
     widthIn,
     delay,
     duration,
-    pomFirstGen,
+    pomFirstGen, fadeIn,
 } from "./helpers";
 const d3 = require("d3");
 
@@ -75,19 +75,41 @@ function addPomDemoGraph(stage2, defs) {
         .style("opacity", 0.5)
         .attr("clip-path", "url(#clipLeft2)");
 
-    pomDemoGraph.append("text")
+    const poc2026Line = pomDemoGraph.append("line")
+        .attr("class", "fadeOut")
+        .attr("x1", 0)
+        .attr("x2", graphWidth)
+        .attr("y1", percentageYScale(100 - 61.4))
+        .attr("y2", percentageYScale(100 - 61.4))
+        .attr("stroke-width", 2)
+        .attr("stroke-dasharray", 4)
+        .attr("fill", "none")
+        .attr("stroke", "white");
+
+    fadeIn(poc2026Line, 0.75);
+
+    const poc2026Label = pomDemoGraph.append("text")
+        .text("61.4%")
+        .attr("class", "fadeOut")
+        .attr("x", graphWidth - 8)
+        .attr("y", percentageYScale(100 - 61.4) + 4)
+        .style("font-size", 12)
+        .attr("text-anchor", "end")
+        .attr("dominant-baseline", "text-before-edge")
+        .attr("fill", "white");
+
+    fadeIn(poc2026Label, 0.75);
+
+    const poc50Label = pomDemoGraph.append("text")
         .text("50% d. s. of color")
-        .attr("class", "stage2Label fadeOut")
+        .attr("class", "fadeOut")
         .attr("x", 8)
         .attr("y", graphHeight / 2 + 4)
         .style("font-size", 12)
         .attr("dominant-baseline", "text-before-edge")
-        .attr("fill", "white")
-        .style("opacity", 0)
-        .transition()
-        .delay(delay + 300)
-        .duration(duration)
-        .style("opacity", 0.5);
+        .attr("fill", "white");
+
+    fadeIn(poc50Label, 0.5);
 
     widthIn(clipLeft1, graphWidth);
 
@@ -130,10 +152,33 @@ function addPomFirstGenGraph(stage2, defs) {
         .attr("fill", pomonaColors[0])
         .attr("class", "popOut")
         .datum(pomFirstGen)
-        .attr("d", (d, i, a) => {
-            console.log(area(d, i, a));
-            return area(d, i, a);
-        });
+        .attr("d", area);
+
+    const firstGen2026Line = pomFirstGenGraph
+        .append("line")
+        .attr("class", "fadeOut")
+        .attr("x1", 0)
+        .attr("x2", graphWidth)
+        .attr("y1", percentageYScale(100 - pomFirstGen[0]))
+        .attr("y2", percentageYScale(100 - pomFirstGen[0]))
+        .attr("stroke-width", 2)
+        .attr("stroke-dasharray", 4)
+        .attr("fill", "none")
+        .attr("stroke", "black");
+
+    fadeIn(firstGen2026Line, 0.75);
+
+    const firstGen2026Label = pomFirstGenGraph.append("text")
+        .text(`${pomFirstGen[0]}%`)
+        .attr("class", "fadeOut")
+        .attr("x", graphWidth - 8)
+        .attr("y", percentageYScale(100 - pomFirstGen[0]) - 4)
+        .style("font-size", 12)
+        .attr("text-anchor", "end")
+        .attr("dominant-baseline", "text-after-edge")
+        .attr("fill", "black");
+
+    fadeIn(firstGen2026Label, 0.75);
 
     widthIn(clipMidLeft, graphWidth);
 }

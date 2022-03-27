@@ -45,13 +45,13 @@ export const hmcColors = ["#2c4391","#af6587","#d7aa98","#f0efe2"];
 export const delay = 200;
 export const duration = 500;
 
-export function fadeIn(node, delay = 200, duration = 500) {
+export function fadeIn(node, opacity = 1.0, delay = 200, duration = 500) {
     node
         .style("opacity", 0)
         .transition()
         .delay(delay)
         .duration(duration)
-        .style("opacity", 1.0)
+        .style("opacity", opacity)
 }
 
 export function widthIn(node, width = 64, delay = 200, duration = 500) {

@@ -133,10 +133,10 @@ export function addStage1 (svg, isVertical) {
         .text(`First-gen students: ${pomFirstGen[0]}%`)
         .attr("class", "fadeOut")
         .attr("x", graphWidth)
-        .attr("y", percentageYScale(100 - pomFirstGen[0]) + 4)
+        .attr("y", percentageYScale(100 - pomFirstGen[0]) - 4)
         .style("font-size", 12)
         .attr("text-anchor", "end")
-        .attr("dominant-baseline", "text-before-edge")
+        .attr("dominant-baseline", "text-after-edge")
         .attr("fill", "black");
 
     fadeIn(pomFirstGenLabel);
