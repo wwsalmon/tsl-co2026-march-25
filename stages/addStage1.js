@@ -33,7 +33,7 @@ export function addStage1 (svg, isVertical) {
         .data(pom2026stack)
         .enter()
         .append("rect")
-        .attr("class", "stage1PomDemRect")
+        .attr("class", "stage1PomDemRect widthOut")
         .attr("x", 0)
         .attr("y", d => percentageYScale(d[0]))
         .attr("height", d => percentageYScale(d[1] - d[0]))

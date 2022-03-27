@@ -7,32 +7,25 @@ import {
     pomonaColors,
     widthIn,
     delay,
-    duration
+    duration,
+    pomFirstGen,
 } from "./helpers";
 const d3 = require("d3");
 
-export function addStage2 (svg, isVertical) {
+function addPomDemoGraph(stage2, defs) {
+    const area = d3.area()
+        .x((d, i, a) => i * (graphWidth / (a.length - 1)))
+        .y0(d => percentageYScale(d[0]))
+        .y1(d => percentageYScale(d[1]));
+
     const pomData = pomAdm.map(d => Object.fromEntries(d.map((d, i) => [i, d])));
     const pomPercPoc = pomAdm.map(d => [...d].splice(3).reduce((a, b) => a + b, 0));
     const pomStack = d3.stack(pomData).keys(Object.keys(pomData[0]))(pomData);
 
-    svg.select("#subtitle-slot-1").text("Admitted class composition over time");
-
-    const area = d3.area()
-        .x((d, i) => i * (graphWidth / (pomAdm.length - 1)))
-        .y0(d => percentageYScale(d[0]))
-        .y1(d => percentageYScale(d[1]));
-
     const line = d3.line()(pomPercPoc.map((d, i) => [
-        i * (graphWidth / (pomAdm.length - 1)),
+        i * (graphWidth / (pomPercPoc.length - 1)),
         percentageYScale(100 - d),
     ]));
-
-    const stage2 = svg.append("g")
-        .attr("id", "stage2")
-        .attr("class", "popOut");
-
-    const defs = stage2.append("defs").attr("class", "popOut");
 
     const clipLeft1 = defs.append("clipPath")
         .attr("id", "clipLeft1")
@@ -45,14 +38,6 @@ export function addStage2 (svg, isVertical) {
         .attr("id", "clipLeft2")
         .append("rect")
         .attr("class", "widthOut")
-        .attr("width", 0)
-        .attr("height", graphHeight);
-
-    const clipMidLeft = defs.append("clipPath")
-        .attr("id", "clipMidLeft")
-        .append("rect")
-        .attr("class", "widthOut")
-        .attr("x", padding + graphWidth)
         .attr("width", 0)
         .attr("height", graphHeight);
 
@@ -107,4 +92,62 @@ export function addStage2 (svg, isVertical) {
     widthIn(clipLeft1, graphWidth);
 
     widthIn(clipLeft2, graphWidth, delay + 300);
+}
+
+function addPomFirstGenGraph(stage2, defs) {
+    const area = d3.area()
+        .x((d, i, a) => i * (graphWidth / (a.length - 1)))
+        .y0(d => graphHeight)
+        .y1(d => {
+            console.log(d);
+            return graphHeight - percentageYScale(d)
+        });
+
+    const line = d3.line()(pomFirstGen.map((d, i, a) => [
+        i * (graphWidth / (a.length - 1)),
+        graphHeight - percentageYScale(d),
+    ]));
+
+    const clipMidLeft = defs.append("clipPath")
+        .attr("id", "clipMidLeft")
+        .append("rect")
+        .attr("class", "widthOut")
+        .attr("width", 0)
+        .attr("height", graphHeight);
+
+    const pomFirstGenGraph = stage2.append("g")
+        .attr("class", "popOut")
+        .style("transform", `translate(${2 * padding + graphWidth}px, ${padding + 140}px)`);
+
+    pomFirstGenGraph.append("rect")
+        .attr("clip-path", "url(#clipMidLeft)")
+        .attr("width", graphWidth)
+        .attr("height", graphHeight)
+        .attr("fill", "#eee");
+
+    pomFirstGenGraph.append("path")
+        .attr("clip-path", "url(#clipMidLeft)")
+        .attr("fill", pomonaColors[0])
+        .attr("class", "popOut")
+        .datum(pomFirstGen)
+        .attr("d", (d, i, a) => {
+            console.log(area(d, i, a));
+            return area(d, i, a);
+        });
+
+    widthIn(clipMidLeft, graphWidth);
+}
+
+export function addStage2 (svg, isVertical) {
+    svg.select("#subtitle-slot-1").text("Admitted class composition over time");
+
+    const stage2 = svg.append("g")
+        .attr("id", "stage2")
+        .attr("class", "popOut");
+
+    const defs = stage2.append("defs").attr("class", "popOut");
+
+    addPomDemoGraph(stage2, defs);
+
+    addPomFirstGenGraph(stage2, defs);
 }
