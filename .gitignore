@@ -58,7 +58,7 @@ typings/
 .env
 
 .idyll
-# build // un-git-ignoring to deploy on gh-pages
+build
 
 # IDE
 .idea/
