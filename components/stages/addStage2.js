@@ -22,7 +22,7 @@ function addTimeAxis(group, numYears) {
     const timeAxis = d3
         .axisBottom(d3.scaleLinear().domain([2026, 2026 - numYears]).range([graphWidth, 0]))
         .tickFormat(d => d)
-        .ticks(numYears / Math.floor(numYears / 4))
+        .ticks(numYears / Math.max(1, Math.floor(numYears / 4)))
         .tickSize(0);
 
     const firstGenAxis = group.append("g")
@@ -119,7 +119,7 @@ function addDemoGraph(stage2, defs, data, labels, colors = pomonaColors, numBefo
 
     fadeIn(poc50Label, 0.5);
 
-    addTimeAxis(demoGraph, data.length);
+    addTimeAxis(demoGraph, data.length - 1);
 
     addLegend(demoGraph, hmcLabels, hmcColors);
 }
@@ -176,7 +176,7 @@ function addFirstGenGraph(stage2, defs, data, xOffset = 2 * padding + graphWidth
 
     fadeIn(firstGen2026Label, 0.75);
 
-    addTimeAxis(firstGenGraph, data.length);
+    addTimeAxis(firstGenGraph, data.length - 1);
 }
 
 export function addStage2 (svg, isVertical) {
