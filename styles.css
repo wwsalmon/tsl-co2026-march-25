@@ -25,3 +25,8 @@ body {
 .idyll-scroll-text .idyll-step {
     padding: 24px;
 }
+
+.idyll-scroll, .idyll-root {
+    margin: 0;
+    padding: 0;
+}

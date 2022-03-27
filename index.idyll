@@ -10,17 +10,11 @@
 //  color:"black"
 //   /]
 
-Pomona College and Harvey Mudd College admitted classes with 61.4% and 70% domestic students of color respectively last week, setting diversity records at both schools. The results follow a [significant decrease in the number of black and first-generation students](https://tsl.news/pomona-class-of-2025-diversity/) in Pomona’s class of 2025 from previous years due to the pandemic.
-
-Each of the 5Cs released regular decision admission offers to their classes of 2026 last week, but only Pomona and Harvey Mudd have released demographic breakdowns so far.
-
-Scroll through TSL’s breakdown of this year’s and historical data below.
-
 [var name:"state" value:0 /]
 
 [Scroller currentStep:state]
 
-  [Graphic className:"d3-component-container"]
+  [Graphic]
     [CustomD3Component className:"d3-component" state:`state+1` /]
   [/Graphic]
 
@@ -33,21 +27,3 @@ Scroll through TSL’s breakdown of this year’s and historical data below.
   [/Step]
 
 [/Scroller]
-
-As Pomona’s admitted class of 2026 saw a slight increase in diversity across racial demographics, the most substantial increase was among admitted Black students, from 11.8 percent to 15.5 percent. International students and white students were the only demographic groups to see a decrease, with international students decreasing from 15.8 percent to 14.4 percent and white students from 26.3 percent to 20.8 percent.
-
-The 736 students offered admission to Pomona are among the “most diverse in the College’s history,” a March 17 [announcement](https://www.pomona.edu/news/2022/03/17-pomona-college-announces-new-class-2026) stated.
-
-First-generation students make up 23 percent of Pomona’s admitted class of 2026, a substantial increase from the 18.5 percent admitted and 13 percent ultimately enrolled in the class of 2025.
-
-55 percent chose to submit test scores as opposed to 57 percent the year before, the result of a testing requirement that was [suspended](https://tsl.news/pomona-test-optional-policy-extended/) for the pandemic and which the college has continued to make optional until at least 2024. 20 students were offered admission through the Questbridge Scholars program, with another 20 through the Posse Foundation.
-
-Harvey Mudd College admitted 576 students from a pool of 4,440 applicants that made up “the second largest pool in the history of the College,” President Maria Klawe said in a Thursday update to the board of trustees.
-
-“The admitted students are a wonderfully talented group, and this admitted class is among the most diverse in the history of the College,” Klawe added.
-
-The newly admitted class has a 28.8 percent Latino and 10.1 percent Black makeup, greater than the 21.1 percent Latino and 4.5 percent Black makeup of the current enrolled student body.
-
-The 8.1 percent international student composition of the admitted first year class is lower than the 8.5 percent international composition of the current student body. First generation students compose 20.5 percent of the admitted first year class.
-
-34 percent of admitted students chose to submit SAT/ACT scores in the college’s second year of being test optional, a trend that falls in line with other “STEM-focused institutions while other institutions are seeing far higher percentages,” according to the board of trustees update.
