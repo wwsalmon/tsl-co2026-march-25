@@ -18,6 +18,8 @@ function demoGraph(stage1, data, labels, colors = pomonaColors, numBeforePoc = 3
     const percPoc = [...data[0]].splice(numBeforePoc).reduce((a, b) => a + b, 0);
     const dataStacked = d3.stack().keys([...Array(data[0].length).keys()])(dataConverted).map(d => d[0]);
 
+    let needLegend = [];
+
     const demGraph = stage1.append("g")
         .attr("class", "popOut")
         .style("transform", `translate(${xOffset}px, ${padding + 140}px)`);
@@ -56,7 +58,11 @@ function demoGraph(stage1, data, labels, colors = pomonaColors, numBeforePoc = 3
         .enter()
         .append("text")
         .attr("class", "stage1PomDemLabel fadeOut")
-        .text((d, i) => (d[1] - d[0]) > 5 ? `${labels[i]}: ${data[0][i]}%` : "")
+        .text((d, i) => {
+            if (d[1] - d[0] > 5) return `${labels[i]}: ${data[0][i]}%`;
+            needLegend.push({index: i, label: `${labels[i]}: ${data[0][i]}%`});
+            return "";
+        })
         .style("font-size", 12)
         .attr("text-anchor", "end")
         .attr("dominant-baseline", "text-after-edge")
@@ -67,6 +73,27 @@ function demoGraph(stage1, data, labels, colors = pomonaColors, numBeforePoc = 3
         .delay(delay)
         .duration(duration)
         .style("opacity", 0.25);
+
+    const legend = demGraph.selectAll(".stage1DemLegend")
+        .data(needLegend)
+        .enter()
+        .append("g")
+        .attr("class", "fadeOut")
+        .style("transform", (d, i) => `translate(0, ${graphHeight + padding + i * 24}px)`);
+
+    legend.append("rect")
+        .attr("width", 16)
+        .attr("height", 16)
+        .attr("fill", d => colors[d.index]);
+
+    legend.append("text")
+        .text(d => d.label)
+        .attr("x", 28)
+        .style("font-size", 12)
+        .style("opacity", 0.5)
+        .attr("dominant-baseline", "text-before-edge");
+
+    fadeIn(legend);
 
     const pocLineY = percentageYScale(100 - percPoc);
 
